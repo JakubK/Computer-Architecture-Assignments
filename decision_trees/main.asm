@@ -2,7 +2,7 @@
 .model flat
 
 extern _ExitProcess@4 : PROC
- 
+
 .data
 .code
 
@@ -41,7 +41,7 @@ _traverse_tree PROC
 	mov ecx, [ecx+8];<-data
 
 	mov ebx, [ebp+12];wsk na features
-	mov ebx, [4*ecx + ebx];w ebx znajdzie siê features[data]
+	mov ebx, [4*ecx + ebx];w ebx znajdzie siï¿½ features[data]
 
 	cmp ebx, 1
 	je takdziecko
