@@ -48,7 +48,7 @@ displayHolidays PROC
     push dword ptr esp
     push 0
     call _MessageBoxA@16
-    add esp, 16
+    add esp, 20
 
     dalejptl:
         dec ecx
