@@ -23,6 +23,7 @@ save5bits PROC
         bts bx, cx
     dalejptl:
 
+    dec cx
     dec dl
     cmp dl, -1
     jne ptl
