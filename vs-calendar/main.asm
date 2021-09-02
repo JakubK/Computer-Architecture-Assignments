@@ -39,13 +39,14 @@ displayHolidays PROC
     add edx, '0'
     add eax, '0'
     mov byte ptr [esp], al
-    mov byte ptr [esp+1], al
+    mov byte ptr [esp+1], dl
 
+    mov eax, esp
 
     wyswietl:
     push 0
     push 0
-    push dword ptr esp
+    push dword ptr eax
     push 0
     call _MessageBoxA@16
     add esp, 20
