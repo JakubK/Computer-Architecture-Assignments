@@ -42,6 +42,8 @@ rows:
     mov dword ptr[edi], ebx ;odsyłamy wiersz do pamięci
     pop ecx
     dec eax
+    cmp eax, -1
+    jne cols
 
     inc ecx
     cmp ecx, 15
