@@ -9,35 +9,29 @@ rows:
 
     mov esi, dword ptr [esi]; w esi znajduje się wartość wiersza poprzedniego
     bswap esi
-
-    cols:
-        mov ebx, dword ptr [edi] ;pobieramy wiersz
-        bswap ebx
-        ;musimy wyrównać 3 bity znaczące z esi do prawej
+    mov ebx, dword ptr [edi] ;pobieramy wiersz
+    bswap ebx
+    cols: ;musimy wyrównać 3 bity znaczące z esi do prawej
         push ecx
         movzx ecx, eax
-        sub ecx, 2
-        ;w ecx przesunięcie
+        sub ecx, 2 ;w ecx przesunięcie
         shr esi, ecx
-        and esi, 00000008h
-        ;w esi znajdują się 3 znaczące bity
-        cmp esi, 1
+        and esi, 00000008h ;w esi znajdują się 3 znaczące bity
+        cmp esi, 1 
         jb zero
         cmp esi, 4
-        ja zero
-            ;tutaj wpisujemy jedynkę
+        ja zero ;tutaj wpisujemy jedynkę
             bts ebx, eax ;aktualizujemy wiersz
             jmp dalej
-        zero:
-            ;tutaj wpisujemy zero
+        zero: ;tutaj wpisujemy zero
             btr ebx, eax ;aktualizujemy
         dalej:
-        bswap ebx
-        mov dword ptr[edi], ebx ;odsyłamy wiersz do pamięci
         pop ecx
         dec eax
         cmp eax, -1
     jne cols
+        bswap ebx
+        mov dword ptr[edi], ebx ;odsyłamy wiersz do pamięci
 
     inc ecx
     cmp ecx, 15
