@@ -1,13 +1,6 @@
-.data
-starting_row db 0h, 0h, 80h, 0h
-next_rows db 15*4 dup(?)
-.code
-
 mov ecx, 0; licznik wierszy
-
-
 rows:
-    mov eax, 31; eax to licznik bitów w wierszu
+    mov eax, 30; eax to licznik bitów w wierszu - 30 ponieważ nie możemy zmodyfikować najstarszego bitu, bo w poprzednim wierszu nie ma STARSZEGO bitu
     mov esi, offset starting_row
     mov esi, dword ptr [esi + ecx*4]; w esi znajduje sie adres wiersza poprzedniego
 
@@ -47,4 +40,4 @@ rows:
 
     inc ecx
     cmp ecx, 15
-    jne rows
+jne rows
