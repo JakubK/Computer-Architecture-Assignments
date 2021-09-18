@@ -3,70 +3,46 @@ starting_row db 0h, 0h, 80h, 0h
 next_rows db 15*4 dup(?)
 .code
 
-mov ecx, 0; numer wiersza
+mov ecx, 0; licznik wierszy
+
+
 rows:
+    mov eax, 31; eax to licznik bitów w wierszu
+    mov esi, offset starting_row
+    mov esi, dword ptr [esi + ecx*4]; w esi znajduje sie adres wiersza poprzedniego
 
-mov ebx, offset starting_row
-lea ebx, [ebx + 16*ecx - ecx] w ebx znajduje się adres wiersza
-mov edi, ebx ;edi - adres wiersza
-mov ebx, dword ptr [edi] ;w ebx znajduje się wiersz
+    mov edi, offset next_rows
+    mov edi, dword ptr [edi + ecx*4]; w edi znajduje się adres wiersza docelowego
 
-mov ah, 0;licznik bitów w wierszu
-kolumny:
-    push ebx
-    ;wypełniamy od lewej do prawej
-    ;obliczamy o ile shrnąć wiersz 
-    by wydobyć tylko interesujące bity i wyrównać je do prawej
-    mov dh, 29
-    sub dh, ah ;zmniejszamy dh, im bliżej jesteśmy tym mniej chcemy się przesuwać
-    shr ebx, dh
-    and ebx, 00000008h ;zachowujemy tylko 3 najmłodsze bity
+    mov esi, dword ptr [esi]; w esi znajduje się wartość wiersza poprzedniego
 
-    ;z minimalizacji funkcji bitowej którą realizuje automat wynika
-    ;że jeśli liczba bitowa złożona z 3 bitów z poprzedniego wiersza zawiera się
-    ;<1,4>) to ustawiamy 1, w przeciwnym razie 0
+    cols:
 
-    cmp ebx, 1
+    ;musimy wyrównać 3 bity znaczące z esi do prawej
+    push ecx
+    movzx ecx, eax
+    sub ecx, 2
+    ;w ecx przesunięcie
+    shr esi, ecx
+    and esi, 00000008h
+    ;w esi znajdują się 3 znaczące bity
+    cmp esi, 1
     jb zero
-    cmp ebx, 4
+    cmp esi, 4
     ja zero
-
-    ;tutaj ustawiamy 1
-        mov ebx, dword ptr [edi]
-        push ecx
-        ;ustawiamy ecx na odpowiedni bit
-        mov ecx, 0
-        mov ch, 31
-        sub ch, ah
-        bts ebx, ecx
-        ;odesłanie wiersza do pamięci
-        pop ecx
+        ;tutaj wpisujemy jedynkę
+        mov ebx, dword ptr [edi] ;pobieramy wiersz
+        bts ebx, eax ;aktualizujemy
         jmp dalej
-
     zero:
-        ;tutaj ustawiamy 0
-        mov ebx, dword ptr [edi]
-        push ecx
-        ;ustawiamy ecx na odpowiedni bit
-        mov ecx, 0
-        mov ch, 31
-        sub ch, ah
-        btr ebx, ecx
-        ;odesłanie wiersza do pamięci
-        pop ecx
-
+        ;tutaj wpisujemy zero
+        mov ebx, dword ptr [edi] ;pobieramy wiersz
+        btr ebx, eax ;aktualizujemy
     dalej:
-    mov dword ptr [edi], ebx
-    pop ebx
-    inc ah
-    cmp ah, 32
-    jne kolumny
+    mov dword ptr[edi], ebx ;odsyłamy wiersz do pamięci
+    pop ecx
+    dec eax
 
-
-
-
-
-inc ecx
-cmp ecx, 15
-jne rows
-
+    inc ecx
+    cmp ecx, 15
+    jne rows
