@@ -8,34 +8,35 @@ rows:
     mov edi, dword ptr [edi + ecx*4]; w edi znajduje się adres wiersza docelowego
 
     mov esi, dword ptr [esi]; w esi znajduje się wartość wiersza poprzedniego
+    bswap esi
 
     cols:
-
-    ;musimy wyrównać 3 bity znaczące z esi do prawej
-    push ecx
-    movzx ecx, eax
-    sub ecx, 2
-    ;w ecx przesunięcie
-    shr esi, ecx
-    and esi, 00000008h
-    ;w esi znajdują się 3 znaczące bity
-    cmp esi, 1
-    jb zero
-    cmp esi, 4
-    ja zero
-        ;tutaj wpisujemy jedynkę
         mov ebx, dword ptr [edi] ;pobieramy wiersz
-        bts ebx, eax ;aktualizujemy
-        jmp dalej
-    zero:
-        ;tutaj wpisujemy zero
-        mov ebx, dword ptr [edi] ;pobieramy wiersz
-        btr ebx, eax ;aktualizujemy
-    dalej:
-    mov dword ptr[edi], ebx ;odsyłamy wiersz do pamięci
-    pop ecx
-    dec eax
-    cmp eax, -1
+        bswap ebx
+        ;musimy wyrównać 3 bity znaczące z esi do prawej
+        push ecx
+        movzx ecx, eax
+        sub ecx, 2
+        ;w ecx przesunięcie
+        shr esi, ecx
+        and esi, 00000008h
+        ;w esi znajdują się 3 znaczące bity
+        cmp esi, 1
+        jb zero
+        cmp esi, 4
+        ja zero
+            ;tutaj wpisujemy jedynkę
+            bts ebx, eax ;aktualizujemy wiersz
+            jmp dalej
+        zero:
+            ;tutaj wpisujemy zero
+            btr ebx, eax ;aktualizujemy
+        dalej:
+        bswap ebx
+        mov dword ptr[edi], ebx ;odsyłamy wiersz do pamięci
+        pop ecx
+        dec eax
+        cmp eax, -1
     jne cols
 
     inc ecx
