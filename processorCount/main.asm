@@ -16,7 +16,7 @@
 ;  WORD      wProcessorLevel;               ;2byte
 ;  WORD      wProcessorRevision;            ;2byte
 ;} SYSTEM_INFO,                             ;=36bytes
-*LPSYSTEM_INFO;
+;*LPSYSTEM_INFO;
 
 .686
 .model flat
