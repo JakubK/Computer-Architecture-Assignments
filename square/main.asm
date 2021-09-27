@@ -17,6 +17,8 @@ square PROC
         call square
         add esp, 4
 
+        add eax, ebx
+
     koniec:
     pop ebx
     pop ebp
