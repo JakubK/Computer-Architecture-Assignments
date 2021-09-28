@@ -3,7 +3,7 @@
 create_benford_distribution_asm PROC
     push ebp
     mov ebp, esp
-
+    push ecx
     ;od 1 do 9 to 9 floatów
     mov eax, 9
     lea eax, [4*eax];tyle bajtów potrzeba na 9 floatów
@@ -44,7 +44,7 @@ create_benford_distribution_asm PROC
         cmp ecx, 10
         jne ptl
 
-
+    pop ecx
     pop ebp
     ret
 create_benford_distribution_asm ENDP
