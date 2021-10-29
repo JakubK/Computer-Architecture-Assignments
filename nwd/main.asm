@@ -5,7 +5,7 @@ NWD PROC
     push edx
 
         mov ebx, dword ptr [ebp+8] ;a
-        mov edx, dword ptr [ebp+8] ;b
+        mov edx, dword ptr [ebp+12] ;b
 
         cmp ebx, edx
         jne nierowne
