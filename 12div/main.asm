@@ -6,6 +6,7 @@ extern _ExitProcess@4 : PROC
 .data
 znaki db 12 dup (?)
 magazyn db 80 dup (0)
+output db 80 dup (0)
 .code
 ;Display number from EAX in terminal as base10
 wyswietl_EAX PROC
@@ -108,7 +109,6 @@ wczytaj12_EAX PROC
 wczytaj12_EAX ENDP
 
 _main PROC
-
 push 80
 push OFFSET magazyn
 push 0
@@ -132,8 +132,43 @@ dalej:
     ;ecx jest ustawiony na kolejną liczbe
     mov ebx, eax
     call wczytaj12_EAX
-    add eax, ebx
+
+    ;swap 2 registers eax <=> ebx
+    mov edx, eax
+    mov eax, ebx
+    mov ebx, edx
+
+
+    mov edx, 0
+    div ebx
     call wyswietl_EAX
+    ;kropka
+
+    mov [output], byte ptr '.'
+
+    mov ecx, 1
+    pokropce:
+    ;mnozymy eax przez 10
+    mov eax, edx
+    lea eax, [eax + 8*eax];x9
+    add eax, edx;x10
+    mov edx, 0
+    div ebx
+    add eax, '0'
+    mov [output + ecx], al
+    ;call wyswietl_EAX
+    inc ecx
+    cmp ecx, 3
+    jne pokropce
+
+    mov ecx, 3
+
+    push ecx
+    push dword PTR 3 ; liczba wyświetlanych znaków
+    push dword PTR OFFSET output ; adres wyśw. obszaru
+    push dword PTR 1; numer urządzenia (ekran ma numer 1)
+    call __write ; wyświetlenie liczby na ekranie
+    add esp, 12 ; usunięcie parametrów ze stosu
 
 push 0
 call _ExitProcess@4
