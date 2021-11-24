@@ -8,7 +8,7 @@ znaki db 12 dup (?)
 magazyn db 80 dup (0)
 magazyn1 db 80 dup (0)
 magazyn2 db 80 dup (0)
-
+minus db '-',0
 .code
 ;Display number from EAX in terminal as base10
 wyswietl_EAX PROC
@@ -51,22 +51,25 @@ wyswietl_EAX PROC
 wyswietl_EAX ENDP
 
 ;Wczytaj liczbę ósemkową z magazyn do EAX 
+;IN:
 ;W ESI adres magazynu
+;OUT
+;w EBX znak liczby
 wczytaj8_EAX PROC
     push ebp
     mov ebp, esp
-    push ebx
     push ecx
     push edx
 
     mov ebx, 0; 
     mov ecx, 0; licznik cyfr + znak minus
     mov edx, 0; licznik cyfr
-    
+    push dword ptr 0
     cmp byte ptr [esi + ecx], '-'
     jne ptl
-
-    sete bl;bl == 1 => EAX < 0
+    pop ebx
+    push dword ptr 1;zapamiętanie znaku -
+    ;sete bl;bl == 1 => EAX < 0
     inc ecx
 
     ptl:
@@ -105,9 +108,10 @@ wczytaj8_EAX PROC
         cmp edx, ecx
     jne dekodowanie 
 
+    pop ebx; odtworzenie zapamiętanego znaku
+
     pop edx
     pop ecx
-    pop ebx
     pop ebp
     ret
 wczytaj8_EAX ENDP
@@ -125,6 +129,11 @@ add esp, 12
 mov esi, offset magazyn1
 call wczytaj8_EAX
 
+cmp ebx, 1
+jne dalejczytaj
+neg eax;ustaw znak na ujemny
+dalejczytaj:
+
 push eax
 
 push 80
@@ -136,10 +145,26 @@ add esp, 12
 mov esi, offset magazyn2
 call wczytaj8_EAX
 
+cmp ebx, 1
+jne dalejczytaj2
+neg eax;ustaw znak na ujemny
+dalejczytaj2:
+
 mov edx, eax
 pop eax
 add eax, edx
 
+;jeśli najstarszy bit eax=1, zaneguj eax i pokaż -
+bt eax, 31
+jnc wyswietl
+neg eax
+push dword PTR 1 ; liczba wyświetlanych znaków
+push dword PTR OFFSET minus ; adres wyśw. obszaru
+push dword PTR 1; numer urządzenia (ekran ma numer 1)
+call __write ; wyświetlenie liczby na ekranie
+add esp, 12
+
+wyswietl:
 call wyswietl_EAX
 
 
