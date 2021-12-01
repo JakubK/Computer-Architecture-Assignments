@@ -39,6 +39,7 @@ sortowanie PROC
                 ;edx jest wcześniej, więc jeśli jest większe to zamiana
                 cmp edx, esi
                 ja zamiana
+                jb dalej
                 cmp eax, edi
                 ja zamiana
                 jmp dalej
