@@ -1,6 +1,9 @@
 merge_reversed PROC
     push ebp
     mov ebp, esp
+    push ebx
+    push ecx
+    push edx
 
     mov eax, 0
     cmp dword ptr [ebp+16], 32
@@ -33,12 +36,16 @@ merge_reversed PROC
         ;tutaj odkładamy ebx i edx
         mov dword ptr [eax + ecx], ebx
         mov dword ptr [eax + 4*ecx], edx
-        
+
         inc ecx
         cmp ecx, dword ptr [ebp+12]
         jne ptl
 
     koniec:
+
+    pop edx
+    pop ecx
+    pop ebx
 
     pop ebp
     ret
