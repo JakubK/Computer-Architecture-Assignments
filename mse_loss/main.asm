@@ -1,7 +1,7 @@
 mse_loss PROC
     push ebp
     mov ebp, esp
-    
+
     push ebx
     push ecx
     push edx
@@ -10,10 +10,10 @@ mse_loss PROC
     mov eax, 0 ;akumulator sumy
     ptl:
         mov ebx,dword ptr [ebp+8]
-        mov ebx,dword ptr [ebx + ecx];x
+        mov ebx,dword ptr [ebx + 4*ecx];x
 
         mov edx,dword ptr [ebp+12]
-        mov edx,dword ptr [edx + ecx];y
+        mov edx,dword ptr [edx + 4*ecx];y
 
         sub ebx, edx
         mov edx ,0
