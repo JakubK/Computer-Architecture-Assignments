@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-int * merge_reversed(int tab1[], int tab2[], int n);
+int* merge_reversed(int tab1[], int tab2[], int n);
 
 int main() {
     int n;
@@ -19,12 +19,12 @@ int main() {
 
     for (int i = 0; i < n; i++)
     {
-        scanf("%d", &tab2[n-1-i]);
+        scanf("%d", &tab2[i]);
     }
 
-    int * result = merge_reversed(tab1,tab2,n);
-    for (int i = 0;i < 2 * n;i++) {
-        printf("%d", result[i]);
+    int* result = merge_reversed(tab1, tab2, n);
+    for (int i = 0; i < 2 * n; i++) {
+        printf("%d\n", result[i]);
     }
 
     return 0;
