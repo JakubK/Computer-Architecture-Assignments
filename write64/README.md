@@ -7,4 +7,5 @@ Using x64 registers or SSE instructions is forbidden.
 Your solution should contain example call of your subroutine.
 
 Hint:
+<br>
 ![](div.png)
