@@ -54,7 +54,7 @@ _Laplasjan PROC
         cmp esi, dword ptr [ebp+12]
         jne perCol
     inc edi
-    cmp edi, dword ptr [ebp+15]
+    cmp edi, dword ptr [ebp+16]
     jne perRow
 
     pop edi
