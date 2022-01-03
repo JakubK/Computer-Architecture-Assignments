@@ -7,7 +7,9 @@ jc roundUp
 and dl, 07Fh
 jmp koniec
 roundUp:
-or dl, 0FFh
+shr edx, 7
+inc edx
+shl edx, 7
 koniec:
 
 ret
