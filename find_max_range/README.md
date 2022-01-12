@@ -6,7 +6,7 @@ Implement in x86 masm a subroutine adjusted to be called from C language. It sho
 float find_max_range(float v, float alpha);
 ```
 
-Which is meant to calculate maximum distance Z on which given body thrown at angle (in radians) `alpha`, with speed `v` and earth acceleration `g` with 2 decimal places precision. 
+Which is meant to calculate maximum distance Z for given body thrown at angle (in radians) `alpha`, with speed `v` and earth acceleration `g` with 2 decimal places precision. 
 
 ![](img.png)
 
