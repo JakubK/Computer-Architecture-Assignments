@@ -1,5 +1,5 @@
 .data
-trzy dd 3
+trzy dd 3.0
 .code
 obj_stozka_sc PROC
     push ebp
