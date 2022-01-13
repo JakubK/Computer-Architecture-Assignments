@@ -20,19 +20,22 @@ wyrownaj PROC
         jne ptl
 
         ;jeśli tu jesteśmy to udało się w końcu zaalokować odpowiedni obszar, teraz musimy przepisać dane
-        push dword ptr 0
-        mov ecx, dword ptr [ebp+8]
+        push dword ptr 0 ;inicjujemy licznik
+        mov ecx, dword ptr [ebp+8];tab1*
         przepisanie:
             ;edx:ebx:esi:edi
-            mov edi, dword ptr[16*ecx]
-            mov esi, dword ptr[16*ecx + 4]
-            mov ebx, dword ptr[16*ecx + 8]
-            mov edx, dword ptr[16*ecx + 12]
+            mov edi, dword ptr[ecx]
+            mov esi, dword ptr[ecx + 4]
+            mov ebx, dword ptr[ecx + 8]
+            mov edx, dword ptr[ecx + 12]
 
-            mov dword ptr [16*eax], edi
-            mov dword ptr [16*eax+4], esi
-            mov dword ptr [16*eax+8], ebx
-            mov dword ptr [16*eax+12], edx
+            mov dword ptr [eax], edi
+            mov dword ptr [eax+4], esi
+            mov dword ptr [eax+8], ebx
+            mov dword ptr [eax+12], edx
+
+            add ecx, 16
+            add eax, 16
 
             mov ebx, dword ptr [ebp+12]
             inc dword ptr [esp]
