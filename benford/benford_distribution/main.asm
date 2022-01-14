@@ -1,6 +1,6 @@
 
 
-create_benford_distribution_asm PROC
+_create_benford_distribution_asm PROC
     push ebp
     mov ebp, esp
     push ecx
@@ -47,4 +47,4 @@ create_benford_distribution_asm PROC
     pop ecx
     pop ebp
     ret
-create_benford_distribution_asm ENDP
+_create_benford_distribution_asm ENDP
