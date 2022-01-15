@@ -27,10 +27,7 @@ _check_data PROC
     inc ecx
     jmp ptl
   dalej:
-  ;w esi mamy liczbe przecinków, zdekrementujmy a otrzymamy len
-  dec esi
   ;teraz możemy wydobyć dane faktyczne
-
   push esi
   push edi
   call _get_actual_distribution
