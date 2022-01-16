@@ -3,6 +3,9 @@ _zeruj PROC
   mov ebp, esp
   pusha
   finit
+  push 037FH
+  fldcw word ptr [esp]
+  add esp, 4
   mov ecx, 0
   
   mov eax, dword ptr [ebp+8];liczby*
@@ -41,16 +44,16 @@ _zeruj PROC
   ;tutaj zerujemy
   push ecx
   mov ecx, 0
-  wewnetrznaPetla2:
+  zero:
     mov dword ptr [eax], 0
     add eax, 4
     inc ecx
     cmp ecx, 8
-  jne wewnetrznaPetla2
+  jne zero
   pop ecx
   jmp kontynuuj
   dalej:
-  add eax, 64
+  add eax, 32
   kontynuuj:
   inc ecx
   cmp ecx, dword ptr [ebp+16] ;n
