@@ -2,7 +2,6 @@ _aktualna_godzina PROC
   push ebp
   mov ebp, esp
   pusha
-
   ;alokacja przestrzeni na strukturę
   sub esp, 16
   push esp
@@ -16,7 +15,10 @@ _aktualna_godzina PROC
   mov ebx, 10
   movzx eax, ax
   div ebx
-  mov byte ptr [ebp + 8], dl
+  mov ebx, dword ptr [ebp + 8]
+  add dl, '0'
+  mov byte ptr [ebx], dl
+  mov byte ptr [ebx+1],0
   jmp koniec
   dwucyfrowe:
   mov edx, 0
@@ -26,10 +28,14 @@ _aktualna_godzina PROC
   push edx
   mov edx, 0
   div ebx
+
   mov ebx, dword ptr [ebp + 8]
+  add dl, '0'
   mov byte ptr [ebx], dl
   pop edx
+  add dl,'0'
   mov byte ptr [ebx + 1], dl
+  mov byte ptr [ebx + 2], 0
 
   koniec:
   add esp, 16
