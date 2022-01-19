@@ -30,6 +30,7 @@ szyfruj PROC
             cmp bl, 1
             je carry
             clc
+            jmp dalej
             carry:
             stc
             dalej:
