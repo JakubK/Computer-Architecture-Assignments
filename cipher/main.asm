@@ -1,10 +1,9 @@
 
 
-szyfruj PROC
+_szyfruj PROC
     push ebp
     mov ebp, esp
         pusha
-
         mov edx, 52525252h ;wektor inicjujący
         mov ecx, 0
         mov eax, dword ptr [ebp+8] ;*tekst
@@ -26,22 +25,16 @@ szyfruj PROC
             adc bl, 0   
             bt edx, 31
             adc bl, 0
-            ;w bl znajduje się liczba jedynek, jeśli bl=1 to ustawiamy carry, jeśli nie to resetujemy
+            ;w bl znajduje się liczba jedynek, jeśli bl=1 to ustawiamy bh, jeśli nie to resetujemy
             cmp bl, 1
-            je carry
-            clc
-            jmp dalej
-            carry:
-            stc
-            dalej:
+            sete bh
             ;robimy shift 
             shl edx, 1
-            or dl, bl;ustawiamy najmłodszy bit
+            or dl, bh
             inc ecx
             jmp szyfruj
         koniec:
-
         popa
     pop ebp
     ret
-szyfruj ENDP
+_szyfruj ENDP
