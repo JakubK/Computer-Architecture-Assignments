@@ -15,6 +15,7 @@ _spacje PROC
 
   mov al, byte ptr [esp+8]
   mov ecx, 128
+  cld
   rep stosb
   mov [eax + 128], byte ptr 0
   mov eax, esi
