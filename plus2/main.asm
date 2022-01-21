@@ -1,79 +1,57 @@
-
-;2 in IEEE754 =
-;0100 0000 0000 0000 0000 0000 0000 0000
-
-;4 0 0 0  0 0 0 0
-
-
-plus2 PROC
+_plus2 PROC
     push ebp
     mov ebp, esp
+    pusha
+    ;[ebp+8] float
+    mov eax, dword ptr [ebp+8]
+    mov ebx, eax
+    rol ebx, 9;w bl wykladnik
+    cmp bl, 150
+    ja koniec;znaczna utrata bitów mantysy, wykonanie operacji zakończy się niepoprawnym wynikiem
 
-        mov ebx, 40000000h ;2
-        mov edi, 40000000h ;2
-        mov esi, eax;zapamiętujemy eax w esi
+    mov edx, 2;dwójka do przesuniecia
+    and eax, 7FFFFFh;0111 1111 1|111 1111 1111 1111 1111 1111 - maska dla przechowania mantysy
+    or eax,  800000h;   0000 0000 1|000 0000 0000 0000 0000 0000 - przywrocenie niejawnego bitu mantysy
+    cmp bl, 127
+    jae jedynka_w_lewo
 
-        ;równamy wykładniki do prawej
-        shl eax, 23
-        shl ebx, 23
-        cmp eax, ebx
-        jb zwiekszEAX
-        ja zwiekszEBX
-        je rowne
+    ;Wykładnik < 127
+    mov cl, 127
+    sub cl, bl
+    inc cl ;zwiększenie o 1 pozycji pod którą normalnie miałaby być dodana jedynka
+    shr eax, cl
+    adc eax, 0
+    mov bl, 128;po zwiększeniu liczby o 2 liczba musi mieć wykładnik 128
+    jmp dalej
 
-        zwiekszEBX:
-            mov eax, esi
-            mov ebx, 40000000h;2
-            
-            ;obliczamy eax - ebx => ecx
-            mov ecx, eax
-            sub ecx, ebx
+    jedynka_w_lewo:
+    mov cl, 150
+    sub cl, bl;cl to liczba miejsc o którą należy przesunąć jedynkę
+    shl edx, cl
 
-            ;o tyle należy przesunąć mantysę ebx, wykładnik skopiujemy z eax
-            mov edx, ebx
-            and edx, 007FFFFFFh;zerujemy znak i wykładnik
-            bts edx, 23
-            rcr edx, ecx
-            ;edx ma poprawną mantysę
-            and ebx, FF8000000h
-            or ebx, eax
+    add eax, edx
+    bt eax, 24
+    jnc dalej
 
-            ;esi musi zawierać poprawne eax
-            ;edi musi zawierać poprawne 0.25
-            mov esi, eax
-            mov edi, ebx
-            jmp rowne
-        zwiekszEAX:
-            mov eax, esi
-            mov ebx, 40000000h;2
-            
-            ;obliczamy ebx - eax => ecx
-            mov ecx, ebx
-            sub ecx, eax
+    ;jedynka na bicie niejawnej jedynki może spowodować problem konwersji
+    ;należy przesunąć mantysę i skompensować utratę jedynki
+    shr eax, 1; Przesunięcie mantysy o 1 w prawo
+    adc eax, 0; kompensacja utraconego bitu
+    add bl, 1; zwiększenie wykładnika o 1
 
-            ;o tyle należy przesunąć mantysę eax, wykładnik skopiujemy z ebx
-            mov edx, eax
-            and edx, 007FFFFFFh;zerujemy znak i wykładnik
-            bts edx, 23;ustawiamy niejawną jedynkę
-            rcr edx, ecx
-            ;edx ma poprawną mantysę
-            and eax, FF8000000h
-            or eax, edx
+    dalej:
+    and eax, 7FFFFFh;Maska przechowująca mantysę
+    and ebx, 0FFh;maska przechowująca wykładnik
+    ror ebx, 9; rotacja wykładnika by nie kolidował z mantysą
+    or eax, ebx
+    koniec:
 
-            ;esi musi zawierać poprawne eax
-            ;edi musi zawierać poprawne 0.25
-            mov esi, eax
-            mov edi, 40000000h
-        rowne:
-            mov eax, esi
-            mov ebx, edi
-            ;wykladniki i znaki są w porządku, należy zsumować arytmetycznie mantysy
-            mov edx, eax
-            and edx, 007FFFFFh ;zerujemy znak i wykładnik
-            and ebx, 007FFFFFh ;zerujemy znak i wykładnik
-            and edx, ebx ;poprawna mantysa w edx
-            and eax, FF800000h;tracimy mantysę eax
-            or eax, edx
+    ;obliczenia zakończone, należy umieścić EAX jako float na wierzchołku koprocesora
+    finit
+    push eax
+    fld dword ptr [esp]
+    add esp, 4
+    popa
     pop ebp
     ret
-plus2 ENDP
+_plus2 ENDP
