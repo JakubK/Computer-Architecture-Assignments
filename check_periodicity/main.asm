@@ -15,6 +15,7 @@ _sprawdz_okresowosc PROC
     ;jesli elementow mniej niż 100 to nie da sie policzyc
     cmp ecx, 100
     jae dalej
+    exception:
     finit
     fld1
     fchs
@@ -89,6 +90,7 @@ _sprawdz_okresowosc PROC
     inc ecx
     cmp ecx, 100
     jne ptl
+    jmp exception
     koncz:
     add esp, 4
     koniec:
