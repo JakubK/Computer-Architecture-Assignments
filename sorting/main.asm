@@ -1,6 +1,3 @@
-
-
-
 sortowanie PROC
     push ebp
     mov ebp, esp
