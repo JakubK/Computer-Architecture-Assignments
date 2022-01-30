@@ -21,8 +21,8 @@ czy_calkowita PROC ;edi=1 jeśli całkowita, zakładamy że w segmencie danych s
   mov ecx, edi
   and edx, 000FFFFFh;zachowanie mantysy
   sub ecx, 1023;zgubienie biasu
-  shrd eax, edx, cl
-  shr edx, cl
+  shld edx, eax, cl
+  shl eax, cl
   cmp edx, 0
   sete cl
   cmp eax, 0
