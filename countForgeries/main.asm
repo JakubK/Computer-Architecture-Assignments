@@ -1,4 +1,4 @@
-;nalezy wejść w każdy element, policzyć xor każdego znaku ze sobą i z parametrem klucz
+;nalezy wejść w każdy element, policzyć xor każdego znaku wartości tekst ze sobą i z parametrem klucz
 ;jeśli xor jest różny od wartości szyfr, podbić licznik
 ;zwrócić licznik
 

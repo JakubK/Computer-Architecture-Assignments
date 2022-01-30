@@ -27,8 +27,8 @@ _rozklad PROC
   mov eax, dword ptr [esi];młodsza część
   div dword ptr dzielnik
   mul dword ptr dzielnik
-  sub eax, dword ptr [esi]
-  mov edx, eax
+  mov edx, dword ptr [esi]
+  sub edx, eax
   add [ebx + edx], 1
   popa
   add esi, 8
