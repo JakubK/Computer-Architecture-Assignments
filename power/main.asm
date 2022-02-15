@@ -14,7 +14,7 @@ _potega_rek PROC
   push ebp
   mov ebp, esp
   pusha
-  cmp 0, dword ptr [ebp+12]
+  cmp dword ptr [ebp+12], 0
   je jeden
   mov eax, dword ptr [ebp+12]
   bt eax, 0
@@ -25,13 +25,8 @@ _potega_rek PROC
   push dword ptr [ebp+8]
   call _potega_rek
   add esp, 8
-  push 2
-  sub esp, 4
-  fstp dword ptr [esp];odłożenie na stos wyniku
-  mov edx, esp
-  push dword ptr [edx]
-  call _potega_rek
-  add esp, 8
+  fld st(0)
+  fmul
   jmp koniec
   mnoz:
   dec eax
