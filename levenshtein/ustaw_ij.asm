@@ -6,9 +6,10 @@ _ustaw_ij PROC
   mov eax, dword ptr [ebp+16];i
   mov edx, 0
   mul dword ptr [ebp+24]; m
-  ;w eax m * i
+  shl eax, 2
+  ;w eax 4 * m * i
   mov edx, dword ptr [ebp+20]
-  lea edx, [4 * edx]
+  shl edx, 2
   add edx, eax
 
   mov eax, dword ptr [ebp+8]
@@ -26,9 +27,11 @@ _ustaw_ij PROC
   sub edi, eax
   mov ebx, edi
   mov edi, [edi]
+  inc edi
 
   sub ebx, 4
   mov ebx, [ebx];wartość lewej górnej komórki
+  inc ebx
   push eax ;teraz chcemy porównać litery
   mov ax, word ptr [ebp+12]; a
   cmp ax, word ptr [ebp+14]; b
